@@ -1,4 +1,4 @@
--keep public class droid.multistate.**{
+-keep public class unics.okmultistate.**{
     public *;
     protected * ;
 }

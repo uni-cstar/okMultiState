@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep public class droid.multistate.**{
+-keep public class unics.okmultistate.**{
     public *;
     protected * ;
 }

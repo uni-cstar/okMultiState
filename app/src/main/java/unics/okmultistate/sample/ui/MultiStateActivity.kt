@@ -10,10 +10,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
-import droid.multistate.StateLayout
-import droid.multistate.handler.LeastLottieLoadingStatusView
-import droid.multistate.uistate.ButtonUiState
-import droid.multistate.uistate.LoaderUiState
+import unics.okmultistate.StateLayout
+import unics.okmultistate.handler.LeastLottieLoadingStatusView
+import unics.okmultistate.uistate.ButtonUiState
+import unics.okmultistate.uistate.LoaderUiState
 import unics.okmultistate.sample.R
 import java.text.SimpleDateFormat
 import java.util.Date
