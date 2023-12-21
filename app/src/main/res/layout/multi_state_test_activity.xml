@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <droid.multistate.StateLayout
+        android:id="@+id/multi_state_layout"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#9900ffff">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="这是Content布局部分"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/content_right_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="这是Content布局部分2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </droid.multistate.StateLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/default_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onViewClick"
+                    android:text="使用默认处理" />
+
+                <Button
+                    android:id="@+id/fade_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onViewClick"
+                    android:text="使用渐变动画" />
+
+                <Button
+                    android:id="@+id/latest_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onViewClick"
+                    android:text="loading 最少执行时间" />
+
+                <Button
+                    android:id="@+id/skeleton_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onViewClick"
+                    android:text="使用骨架动画" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/content_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="show content" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/loding_btn"
+                style="@style/MultiStateStyle.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="loading" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/loding2_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ml_btn_background_selector"
+                android:onClick="onViewClick"
+                android:text="change loading message"
+                android:textColor="@color/ml_btn_text_color_selector" />
+
+            <Button
+                android:id="@+id/loding_btn3"
+                style="@style/MultiStateStyle.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="使用lottie动画（小熊）" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/empty_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ml_btn_background_selector"
+                android:enabled="false"
+                android:onClick="onViewClick"
+                android:text="empty"
+                android:textColor="@color/ml_btn_text_color_selector" />
+
+            <Button
+                android:id="@+id/empty_btn2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="empty with button" />
+
+            <Button
+                android:id="@+id/error_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="error" />
+
+            <Button
+                android:id="@+id/error_btn2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="error  with button" />
+
+            <Button
+                android:id="@+id/nonetwork_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="nonetwork" />
+
+            <Button
+                android:id="@+id/nonetwork_btn2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="nonetwork  with retry button" />
+
+            <Button
+                android:id="@+id/nonetwork_btn3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="nonetwork  with retry and setting button" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

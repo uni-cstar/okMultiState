@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--是否TV UI 模式:设置为true会改变默认布局中按钮为focusInTouchMode-->
+    <bool name="television_ui_mode">false</bool>
+
+    <style name="MultiStateStyle" />
+
+    <style name="MultiStateStyle.Text">
+        <item name="android:textSize">@dimen/ml_text_size</item>
+        <item name="android:textColor">@color/ml_text_color</item>
+    </style>
+
+    <style name="MultiStateStyle.Button" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:focusableInTouchMode">@bool/television_ui_mode</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:textColor">@color/ml_btn_text_color_selector</item>
+        <item name="android:background">@drawable/ml_btn_background_selector</item>
+        <item name="backgroundTint">@empty</item>
+    </style>
+
+    <style name="MultiStateStyle.LoadingText" parent="MultiStateStyle.Text" />
+    <style name="MultiStateStyle.EmptyText" parent="MultiStateStyle.Text" />
+    <style name="MultiStateStyle.EmptyButton" parent="MultiStateStyle.Button" />
+    <style name="MultiStateStyle.ErrorText" parent="@style/MultiStateStyle.Text" />
+    <style name="MultiStateStyle.ErrorButton" parent="MultiStateStyle.Button" />
+    <style name="MultiStateStyle.NoNetworkText" parent="@style/MultiStateStyle.Text"/>
+    <style name="MultiStateStyle.NoNetworkButton" parent="MultiStateStyle.Button"/>
+
+</resources>

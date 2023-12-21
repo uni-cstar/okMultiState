@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--文本颜色-->
+    <color name="ml_text_color">@android:color/black</color>
+
+    <!--按钮正常情况下文字颜色-->
+    <color name="ml_button_text_color">#EFD18B</color>
+    <!--按钮按下或获取焦点情况下文字颜色-->
+    <color name="ml_button_highlight_text_color">#663B00</color>
+    <!--按钮不可用文字颜色-->
+    <color name="ml_button_disabled_text_color">#A6A6A6</color>
+
+    <!--按钮普通情况下边框颜色  或者 按钮按下的背景颜色-->
+    <color name="ml_button_highlight_color">#EFD18B</color>
+    <!--按钮不可用背景边框颜色-->
+    <color name="ml_button_disabled_color">#D7D7D7</color>
+
+<!--    <color name="ml_button_bg_normal_color"></color>-->
+<!--    <color name="ml_button_bg_disabled_color"></color>-->
+<!--    <color name="ml_button_bg_disabled_color"></color>-->
+</resources>

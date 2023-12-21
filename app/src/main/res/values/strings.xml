@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">okMultiState</string>
+    <string name="no_network_tip">网络不通畅，请检查网络</string>
+</resources>
