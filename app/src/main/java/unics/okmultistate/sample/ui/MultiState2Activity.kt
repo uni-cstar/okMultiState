@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import droid.multistate.StateLayout
-import droid.multistate.StatusView
-import droid.multistate.bindStateLayout
-import droid.multistate.uistate.*
+import unics.okmultistate.StateLayout
+import unics.okmultistate.StatusView
+import unics.okmultistate.bindStateLayout
+import unics.okmultistate.uistate.*
 import kotlinx.coroutines.*
 import unics.okmultistate.sample.R
 import kotlin.random.Random

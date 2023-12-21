@@ -1,26 +1,22 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
--keep public class droid.multistate.**{
+-keep public class unics.okmultistate.**{
     public *;
     protected * ;
 }
+
+# 保留注解
+-keepattributes *Annotation*
+
+#以下规则不用添加，R8默认保留了元数据
+
+##保留 kotlin.Metadata 注解从而在保留项目上维持元数据
+#-keepattributes RuntimeVisibleAnnotations
+#-keep class kotlin.Metadata { *; }
+
+#-keep @kotlin.Metadata public class unics.okmultistate.**{
+#        public *;
+#        protected *;
+#}
+#-keepclasseswithmembers @kotlin.Metadata public class unics.okmultistate.** {
+#    public *;
+#    protected *;
+#}
