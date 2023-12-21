@@ -26,6 +26,7 @@
 
         <activity android:name=".ui.MultiStateActivity"/>
         <activity android:name=".ui.MultiState2Activity"/>
+        <activity android:name=".ui.SmartHandlerActivity"/>
     </application>
 
 </manifest>

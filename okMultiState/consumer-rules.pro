@@ -1,4 +1,1 @@
--keep public class droid.multistate.**{
-    public *;
-    protected * ;
-}
+# 无规则传递

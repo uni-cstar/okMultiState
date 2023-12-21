@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <droid.multistate.StateLayout
+    <unics.okmultistate.StateLayout
         android:id="@+id/multi_state_layout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
@@ -31,7 +31,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </droid.multistate.StateLayout>
+    </unics.okmultistate.StateLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -67,14 +67,14 @@
                     android:onClick="onViewClick"
                     android:text="loading 最少执行时间" />
 
-                <Button
-                    android:id="@+id/skeleton_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onViewClick"
-                    android:text="使用骨架动画" />
-            </LinearLayout>
 
+            </LinearLayout>
+            <Button
+                android:id="@+id/skeleton_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="使用骨架动画" />
             <Button
                 android:id="@+id/content_btn"
                 android:layout_width="match_parent"

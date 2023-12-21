@@ -10,11 +10,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
-import droid.multistate.StateLayout
-import droid.multistate.handler.LeastLottieLoadingStatusView
-import droid.multistate.uistate.ButtonUiState
-import droid.multistate.uistate.LoaderUiState
+import unics.okmultistate.StateLayout
+import unics.okmultistate.handler.LeastLottieLoadingStatusView
 import unics.okmultistate.sample.R
+import unics.okmultistate.uistate.ButtonUiState
+import unics.okmultistate.uistate.LoaderUiState
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -46,12 +46,12 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
 //                return this.view
 //            }
 //        })
-        multiStateLayout.setOnStateChangedListener(object :StateLayout.OnStatusChangeListener{
+        multiStateLayout.setOnStateChangedListener(object : StateLayout.OnStatusChangeListener {
             override fun onStatusChanged(old: Int, new: Int) {
                 val view = findViewById<TextView>(R.id.content_right_tv)
-                val time =  SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+                val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
                 view.text = time
-                Log.d("MultiState","$time view = $view")
+                Log.d("MultiState", "$time view = $view")
 
             }
 
@@ -65,14 +65,17 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                 multiStateLayout.useDefaultStateChangeHandler()
                 multiStateLayout.showLoading()
             }
+
             R.id.fade_btn -> {
                 multiStateLayout.useFadeAnimStateChangeHandler()
                 multiStateLayout.showLoading()
             }
+
             R.id.latest_btn -> {
-                multiStateLayout.useLeastLoadingStateChangeHandler(5000)
+                multiStateLayout.useLeastLoadingStateChangeHandler(3000, true, 2500, 100)
                 multiStateLayout.showLoading()
             }
+
             R.id.skeleton_btn -> {
                 multiStateLayout.useLeastLoadingStateChangeHandler(object :
                     LeastLottieLoadingStatusView() {
@@ -82,8 +85,7 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                     override fun getLottieView(): LottieAnimationView? {
                         return this.view?.findViewById(R.id.lottie)
                     }
-
-
+                    
                     override fun onCreateView(
                         context: Context,
                         inflater: LayoutInflater,
@@ -97,12 +99,15 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                 }, null)
                 multiStateLayout.showLoading()
             }
+
             R.id.loding_btn -> {
                 multiStateLayout.setLoaderUiState(LoaderUiState.loading("开始加载"))
             }
+
             R.id.loding2_btn -> {
                 multiStateLayout.setLoaderUiState(LoaderUiState.loading("努力加载中"))
             }
+
             R.id.loding_btn3 -> {
                 multiStateLayout.setLoading(object :
                     LeastLottieLoadingStatusView() {
@@ -113,7 +118,6 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                     override fun getLottieView(): LottieAnimationView? {
                         return this.view?.findViewById(R.id.lottie)
                     }
-
 
                     override fun onCreateView(
                         context: Context,
@@ -127,9 +131,11 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                 })
                 multiStateLayout.showLoading()
             }
+
             R.id.empty_btn -> {
                 multiStateLayout.setLoaderUiState(LoaderUiState.empty("空空如也"))
             }
+
             R.id.empty_btn2 -> {
                 multiStateLayout.setLoaderUiState(
                     LoaderUiState.emptyWithButton(
@@ -139,22 +145,26 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                         })
                 )
             }
+
             R.id.error_btn -> {
-                multiStateLayout.setLoaderUiState(LoaderUiState.error(RuntimeException(), "空空如也"))
+                multiStateLayout.setLoaderUiState(LoaderUiState.error(RuntimeException(), "出错啦"))
             }
+
             R.id.error_btn2 -> {
                 multiStateLayout.setLoaderUiState(
                     LoaderUiState.errorWithButton(
                         RuntimeException(),
-                        "空空如也",
+                        "出错啦",
                         buttonClick = {
                             toast("点击了按钮")
                         })
                 )
             }
+
             R.id.nonetwork_btn -> {
                 multiStateLayout.setLoaderUiState(LoaderUiState.noNetwork("网络不通"))
             }
+
             R.id.nonetwork_btn2 -> {
                 multiStateLayout.setLoaderUiState(
                     LoaderUiState.noNetworkWithButton(
@@ -170,6 +180,7 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                     )
                 )
             }
+
             R.id.nonetwork_btn3 -> {
                 multiStateLayout.setLoaderUiState(
                     LoaderUiState.noNetworkWithButton(
@@ -188,6 +199,7 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                     )
                 )
             }
+
             R.id.content_btn -> {
                 multiStateLayout.showContent()
             }
@@ -195,7 +207,7 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
     }
 
 
-    private fun toast(msg:String){
-        Toast.makeText(this,msg, Toast.LENGTH_SHORT).show()
+    private fun toast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
