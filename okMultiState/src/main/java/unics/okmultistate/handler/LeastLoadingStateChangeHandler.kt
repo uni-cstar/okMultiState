@@ -40,9 +40,7 @@ open class LeastLoadingStateChangeHandler(
     }
 
     private val animationUpdateCallback = ValueAnimator.AnimatorUpdateListener {
-        nextStatusView?.let {
-            checkNext(container, it)
-        }
+        checkNext()
     }
 
     override fun onStatusViewGainStateFocus(container: StateLayout, statusView: StatusView) {
@@ -55,22 +53,27 @@ open class LeastLoadingStateChangeHandler(
         }
         if (animationPlaying) {
             log("[onAddView] 正在播放动画")
-            checkNext(container, statusView)
+            checkNext()
             return
         }
 
         if (statusView.status == Status.LOADING) {
             log("[onAddView] 开始播放动画")
             //保存当前的加载动画
-            if (statusView !is LeastLoadingStatusView)
-                throw RuntimeException("使用${this::class.java.name} ,loading status view 必须实现 ${LeastLoadingStatusView::class.java.name} 接口")
+            require(statusView is LeastLoadingStatusView){
+                "使用${this::class.java.name} ,loading status view 必须实现 ${LeastLoadingStatusView::class.java.name} 接口"
+            }
             statusView.onGainStateFocus(container)
             loadingStatusView = statusView
+            //添加监听检测动画时间
+            statusView.removeAnimatorUpdateListener(animationUpdateCallback)
+            statusView.addAnimatorUpdateListener(animationUpdateCallback)
+            statusView.startAnimation()
             loadingStartTime = System.currentTimeMillis()
             animationPlaying = true
-            statusView.startAnimation()
         } else {
-            reset(container)
+            //重置loading
+            resetLoadingStatusState()
             otherStateHandler.onStatusViewGainStateFocus(container, statusView)
             log("[onAddView] 执行普通切换")
         }
@@ -79,15 +82,16 @@ open class LeastLoadingStateChangeHandler(
     override fun onStatusViewLostStateFocus(container: StateLayout, statusView: StatusView) {
         this.container = container
         if (statusView.status == Status.LOADING) {//如果要移除的是loading，先检测是否到时间移除
-            log("[onRemoveView]")
-            val next = this.nextStatusView
-            //下一个状态不为空，则尝试切换下一页
-            if (next == null || !checkNext(container, next)) {
-                log("[onRemoveView] 未切换，等待回调切换")
-                //未到状态切换下一页，则增加监听，根据动画刷新来切换下一页
-                loadingStatusView?.removeAnimatorUpdateListener(animationUpdateCallback)
-                loadingStatusView?.addAnimatorUpdateListener(animationUpdateCallback)
-            }
+            val handled = checkNext()
+            log("[onRemoveView] checkNext=$handled")
+//            val next = this.nextStatusView
+//            //下一个状态不为空，则尝试切换下一页
+//            if (next == null || !checkNext(container, next)) {
+//                log("[onRemoveView] 未切换，等待回调切换")
+//                //未到状态切换下一页，则增加监听，根据动画刷新来切换下一页
+//                loadingStatusView?.removeAnimatorUpdateListener(animationUpdateCallback)
+//                loadingStatusView?.addAnimatorUpdateListener(animationUpdateCallback)
+//            }
         } else {
             log("[onRemoveView] 采用其他方式切换")
             otherStateHandler.onStatusViewLostStateFocus(container, statusView)
@@ -95,26 +99,16 @@ open class LeastLoadingStateChangeHandler(
     }
 
     /**
-     * 检查切换下一个类型
+     * 检查切换到下一个类型
      * @return true 执行了切换，false 未到切换条件
      */
     @Synchronized
-    private fun checkNext(
-        container: StateLayout,
-        next: StatusView
-    ): Boolean {
-        //动画执行时间
-        val loadingStatusView = this.loadingStatusView
-        val playTime = System.currentTimeMillis() - loadingStartTime
-        val duration = leastDuration ?: loadingStatusView?.duration ?: 1
-        require(duration > 0) {
-            "the duration of the animation must greater than 0."
-        }
-        log("[checkNext] playTime=$playTime duration=$duration")
-        return if (playTime >= duration && next.status != Status.LOADING) {
+    private fun checkNext(): Boolean {
+        val next = nextStatusView ?: return false
+        return if (isLoadingDurationEnough()) {
             log("[checkNext] 执行切换")
             //添加下一个视图:loading切换其他视图不采用其他动画处理
-            reset(container)
+            resetLoadingStatusState()
             next.onGainStateFocus(container)
             true
         } else {
@@ -123,7 +117,21 @@ open class LeastLoadingStateChangeHandler(
         }
     }
 
-    private fun reset(container: StateLayout) {
+    private fun isLoadingDurationEnough(): Boolean {
+        //动画执行时间
+        val playTime = System.currentTimeMillis() - loadingStartTime
+        val duration = leastDuration ?: this.loadingStatusView?.duration ?: 1
+        require(duration > 0) {
+            "the duration of the animation must greater than 0."
+        }
+        log("[isLoadingDurationEnough] playTime=$playTime duration=$duration")
+        return playTime >= duration
+    }
+
+    /**
+     * 重置加载状态
+     */
+    private fun resetLoadingStatusState() {
         log("[reset] 重置")
         //动画时间已经超过单次或者指定的最小动画时间，并且下一个展示的控件不是loading类型的，则切换下一个
         detachLoadingStatusView(container, loadingStatusView)
@@ -140,8 +148,10 @@ open class LeastLoadingStateChangeHandler(
         loadingStatusView: LeastLoadingStatusView?,
         removeAllOther: Boolean = true
     ) {
-        loadingStatusView?.removeAnimatorUpdateListener(animationUpdateCallback)
-        loadingStatusView?.cancelAnimation()
+        loadingStatusView?.let {
+            it.removeAnimatorUpdateListener(animationUpdateCallback)
+            it.cancelAnimation()
+        }
         //此时可以先移除其他所有类型的
         if (removeAllOther) {
             container.allStatusView.values.forEach {
@@ -161,9 +171,10 @@ open class LeastLoadingStateChangeHandler(
 
         if (old.status == Status.LOADING) {//替换loading视图
             log("[onSwitchView] 更换loading")
-            if (old !is LeastLoadingStatusView)
-                throw RuntimeException("使用${this::class.java.name} ,loading status view 必须实现 ${LeastLoadingStatusView::class.java.name} 接口")
-            reset(container)
+            require(old is LeastLoadingStatusView){
+                "使用${this::class.java.name} ,loading status view 必须实现 ${LeastLoadingStatusView::class.java.name} 接口"
+            }
+            resetLoadingStatusState()
             loadingStatusView = old
         }
     }

@@ -24,6 +24,7 @@
         style="@style/MultiStateStyle.ErrorButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         tools:text="重试" />
 
     <androidx.constraintlayout.helper.widget.Flow

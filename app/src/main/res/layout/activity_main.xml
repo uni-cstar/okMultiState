@@ -15,4 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="每隔3s自动切换一个随机状态"/>
+
+    <Button
+        android:id="@+id/testBtn3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SmartChangeHandler"/>
 </LinearLayout>

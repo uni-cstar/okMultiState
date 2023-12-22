@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.FrameLayout
 import unics.okmultistate.handler.LeastLoadingStateChangeHandler
 import unics.okmultistate.handler.LeastLoadingStatusView
+import unics.okmultistate.handler.SmartStateChangeHandler
 import unics.okmultistate.handler.StateChangeHandler
 import unics.okmultistate.status.ContentStatusView
 import unics.okmultistate.status.EmptyStatusView
@@ -201,14 +202,24 @@ class StateLayout @JvmOverloads constructor(
     }
 
     /**
-     * 最少时间Loading显示状态处理器：loading status 状态至少显示[leastDuration]时间之后才切换其他状态
+     * 最少时间Loading显示状态处理器：loading status 状态至少显示[leastDuration]时间之后才切换其他状态,
+     * notice:使用该方法，必须保证内部保存的loading status view 必须实现了[LeastLoadingStatusView]
      * @param leastDuration 最少执行的动画时间，如果为null，则使用[LeastLoadingStatusView.duration]作为最小动画时间
+     * @param transformTypeIfNotMatched 如果loading status view 不是[LeastLoadingStatusView]，是否自动转换类型
+     * @param transformedLeastDuration 转换的动画持续时间
+     * @param transformedRefreshInterval 转换的动画刷新间隔
      */
-    fun useLeastLoadingStateChangeHandler(leastDuration: Long?) {
-        val loadingStatusView = allStatusView[Status.LOADING]
-        require(loadingStatusView == null || loadingStatusView is LeastLoadingStatusView) {
-            "使用${LeastLoadingStateChangeHandler::class.simpleName},loading status view 必须实现${LeastLoadingStatusView::class.simpleName}"
-        }
+    fun useLeastLoadingStateChangeHandler(
+        leastDuration: Long?,
+        transformTypeIfNotMatched: Boolean = false,
+        transformedLeastDuration: Long = 1000,
+        transformedRefreshInterval: Long = 100
+    ) {
+        checkLoadingStatusView(
+            transformTypeIfNotMatched,
+            transformedLeastDuration,
+            transformedRefreshInterval
+        )
         stateChangedHandler = StateChangeHandler.leastLoadingAnimStateChangeHandler(leastDuration)
     }
 
@@ -218,13 +229,75 @@ class StateLayout @JvmOverloads constructor(
      * @param leastDuration 至少显示动画多长时间, 如果为null则至少显示动画完整播放一次的时间(即[LeastLoadingStatusView.duration]返回的时间])
      */
     fun useLeastLoadingStateChangeHandler(
-        view: LeastLoadingStatusView, leastDuration: Long? = null
+        view: LeastLoadingStatusView,
+        leastDuration: Long? = null
     ) {
         require(view.status == Status.LOADING) {
             "the status of the param must be ${Status.LOADING}"
         }
         setLoading(view)
         stateChangedHandler = StateChangeHandler.leastLoadingAnimStateChangeHandler(leastDuration)
+    }
+
+    /**
+     * 最少时间Loading显示状态处理器：loading status 状态至少显示[leastDuration]时间之后才切换其他状态,
+     * @param delayMills 延迟时间,具体查看[SmartStateChangeHandler.delayMills]
+     * @param leastDuration 最少执行的动画时间，如果为null，则使用[LeastLoadingStatusView.duration]作为最小动画时间
+     * @param transformTypeIfNotMatched 如果loading status view 不是[LeastLoadingStatusView]，是否自动转换类型
+     * @param transformedLeastDuration 转换的动画持续时间
+     * @param transformedRefreshInterval 转换的动画刷新间隔
+     * @see StateChangeHandler.smartStateChangeHandler
+     */
+    fun useSmartStateChangeHandler(
+        delayMills: Long,
+        leastDuration: Long?,
+        transformTypeIfNotMatched: Boolean = false,
+        transformedLeastDuration: Long = 1000,
+        transformedRefreshInterval: Long = 100
+    ) {
+        checkLoadingStatusView(
+            transformTypeIfNotMatched,
+            transformedLeastDuration,
+            transformedRefreshInterval
+        )
+        stateChangedHandler = StateChangeHandler.smartStateChangeHandler(delayMills, leastDuration)
+    }
+
+    /**
+     * @param transformedLeastDuration 转换的动画持续时间
+     * @param transformedRefreshInterval 转换的动画刷新间隔
+     * @see StateChangeHandler.smartStateChangeHandler
+     */
+    private fun checkLoadingStatusView(
+        transformTypeIfNotMatched: Boolean = false,
+        transformedLeastDuration: Long = 1000,
+        transformedRefreshInterval: Long = 100
+    ) {
+        val loadingStatusView = allStatusView[Status.LOADING] as? LoadingStatusView
+        if (loadingStatusView != null && loadingStatusView !is LeastLoadingStatusView) {
+            if (transformTypeIfNotMatched) {
+                setLoading(
+                    loadingStatusView.toLeastLoadingStatusView(
+                        transformedLeastDuration,
+                        transformedRefreshInterval
+                    )
+                )
+            } else {
+                throw RuntimeException("使用${SmartStateChangeHandler::class.simpleName},loading status view 必须实现${LeastLoadingStatusView::class.simpleName}")
+            }
+        }
+    }
+
+    fun useSmartStateChangeHandler(
+        view: LeastLoadingStatusView,
+        delayMills: Long,
+        leastDuration: Long? = null
+    ) {
+        require(view.status == Status.LOADING) {
+            "the status of the param must be ${Status.LOADING}"
+        }
+        setLoading(view)
+        stateChangedHandler = StateChangeHandler.smartStateChangeHandler(delayMills, leastDuration)
     }
 
     /**
@@ -386,7 +459,7 @@ class StateLayout @JvmOverloads constructor(
 
         previous?.let {
             stateChangedHandler.onReplaceStatusView(this, it, statusView)
-            if(it.hasGainStateFocus)
+            if (it.hasGainStateFocus)
                 it.onLostStateFocus(this)
             it.onDetach(this)
         }

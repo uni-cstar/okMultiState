@@ -29,7 +29,12 @@ interface StateChangeHandler {
         statusView.onLostStateFocus(container)
     }
 
-    companion object DEFAULT: StateChangeHandler {
+    /**
+     * 你可以在这个方法内做内存释放，在StateLayout不再使用时回调该方法
+     */
+    fun onCleared() {}
+
+    companion object DEFAULT : StateChangeHandler {
 
         /**
          * 状态改变的时候，使用渐变切换动画处理器
@@ -53,6 +58,18 @@ interface StateChangeHandler {
             leastDuration: Long? = null
         ): StateChangeHandler {
             return LeastLoadingStateChangeHandler(leastDuration)
+        }
+
+
+        /**
+         * @see SmartStateChangeHandler
+         */
+        @JvmStatic
+        fun smartStateChangeHandler(
+            delayMills: Long = 250,
+            leastDuration: Long? = null
+        ): StateChangeHandler {
+            return SmartStateChangeHandler(delayMills, leastDuration)
         }
 
         /**

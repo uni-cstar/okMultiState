@@ -20,5 +20,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         findViewById<View>(R.id.testBtn2).setOnClickListener {
             startActivity(Intent(this, MultiState2Activity::class.java))
         }
+        findViewById<View>(R.id.testBtn3).setOnClickListener {
+            startActivity(Intent(this, SmartHandlerActivity::class.java))
+        }
+
     }
 }

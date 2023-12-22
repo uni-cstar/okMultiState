@@ -67,14 +67,14 @@
                     android:onClick="onViewClick"
                     android:text="loading 最少执行时间" />
 
-                <Button
-                    android:id="@+id/skeleton_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onViewClick"
-                    android:text="使用骨架动画" />
-            </LinearLayout>
 
+            </LinearLayout>
+            <Button
+                android:id="@+id/skeleton_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClick"
+                android:text="使用骨架动画" />
             <Button
                 android:id="@+id/content_btn"
                 android:layout_width="match_parent"
