@@ -1,4 +1,5 @@
-# StateLayout 说明
+TODO:文档待重新说明
+# 说明
 StateLayout用于提供界面不同状态视图的统一管理。
 - 1、提供常用缺省状态视图：empty、loading、error、no network
 - 2、支持自定义状态视图：支持添加任意状态的自定义视图
@@ -37,21 +38,11 @@ StateLayout显示/隐藏StatusView，支持两种模式：
 
 
 # 工程配置：
-1、在工程的build.gradle中添加如下配置
-```
-allprojects {
-    repositories {
-        maven {
-            url "http://nexus.ucuxin.com/repository/droid-app-release/"
-        }
-    }
-}
-```
 
-2、在module的build.gradle中添加如下配置
+在module的build.gradle中添加依赖
 ```
 dependencies {
-    implementation bas.droid:droid-multistate:2.1.6
+    implementation 'io.github.uni-cstar:okMultiState:0.0.1'
 } 
 ```
 
