@@ -4,10 +4,14 @@ import android.animation.ValueAnimator
 import android.os.Handler
 import android.os.Looper
 
+/**
+ * 显示至少动画时间的动画接口，其实最主要的就是[duration]的定义
+ * 主要是为了支持各种类型的动画，比如补间动画、属性动画、lottie动画、pag动画、模拟动画（）等
+ */
 interface LeastLoadingAnimation {
 
     /**
-     * 单次动画的时间
+     * 单次动画的时间：用于控制该状态至少需要显示的时间
      */
     val duration: Long
 

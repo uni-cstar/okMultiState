@@ -16,7 +16,7 @@ fun interface StatusFactory<T : StatusView> {
 
         @JvmStatic
         fun defaultLoading(): StatusFactory<LoadingStatusView> {
-            return StatusFactory { StatusView.defaultLoading()  }
+            return StatusFactory { StatusView.defaultLoading() }
         }
 
         @JvmStatic

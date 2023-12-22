@@ -26,6 +26,7 @@ abstract class LeastLottieLoadingStatusView(private val defaultDuration: Long = 
             it.removeAllUpdateListeners()
             it.cancelAnimation()
         }
+        super.onDetach(container)
     }
 
     override val duration: Long

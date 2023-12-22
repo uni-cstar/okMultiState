@@ -22,7 +22,7 @@ open class LeastLoadingStateChangeHandler(
     private var loadingStartTime = System.currentTimeMillis()
 
     /**
-     * 下一个展示的Status View:不会是 status view
+     * Loading状态之后的下一个状态视图（不会设置成loading status view）
      */
     private var nextStatusView: StatusView? = null
 
@@ -62,12 +62,10 @@ open class LeastLoadingStateChangeHandler(
         if (statusView.status == Status.LOADING) {
             log("[onAddView] 开始播放动画")
             //保存当前的加载动画
-            if (statusView is LeastLoadingStatusView) {
-                loadingStatusView = statusView
-            } else {
+            if (statusView !is LeastLoadingStatusView)
                 throw RuntimeException("使用${this::class.java.name} ,loading status view 必须实现 ${LeastLoadingStatusView::class.java.name} 接口")
-            }
             statusView.onGainStateFocus(container)
+            loadingStatusView = statusView
             loadingStartTime = System.currentTimeMillis()
             animationPlaying = true
             statusView.startAnimation()
@@ -145,34 +143,28 @@ open class LeastLoadingStateChangeHandler(
         loadingStatusView?.removeAnimatorUpdateListener(animationUpdateCallback)
         loadingStatusView?.cancelAnimation()
         //此时可以先移除其他所有类型的
-        if (removeAllOther){
-//            container.removeAllViews()
-            //移除所有view改为调用所有视图的失去焦点方法
-            //todo 以前采用直接移除所有view的写法也略微粗暴，但是只是图方便又不容易出错的解决办法
+        if (removeAllOther) {
             container.allStatusView.values.forEach {
                 it.onLostStateFocus(container)
             }
         }
     }
 
-    override fun onSwitchView(container: StateLayout, old: StatusView, new: StatusView) {
-        super.onSwitchView(container, old, new)
+    override fun onReplaceStatusView(container: StateLayout, old: StatusView, new: StatusView) {
+        this.container = container
         log("[onSwitchView]")
-        if (old == nextStatusView) {
+        if (nextStatusView == old) {//下一个view是被替换的view，更新即可
             nextStatusView = new
             log("[onSwitchView] 更换下一个view")
+            return
         }
 
-        if (old.status == Status.LOADING) {
+        if (old.status == Status.LOADING) {//替换loading视图
             log("[onSwitchView] 更换loading")
-            if (old is LeastLoadingStatusView) {
-                reset(container)
-                loadingStatusView = old
-            } else {
+            if (old !is LeastLoadingStatusView)
                 throw RuntimeException("使用${this::class.java.name} ,loading status view 必须实现 ${LeastLoadingStatusView::class.java.name} 接口")
-            }
-        } else {
-            log("[onSwitchView] 怪异")
+            reset(container)
+            loadingStatusView = old
         }
     }
 

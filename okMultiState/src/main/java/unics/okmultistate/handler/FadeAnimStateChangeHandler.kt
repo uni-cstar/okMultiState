@@ -57,10 +57,11 @@ open class FadeAnimStateChangeHandler(
                     }
                 }
 
-                override fun onAnimationCancel(animation: Animator?) {
+                override fun onAnimationCancel(animation: Animator) {
                     //末端状态的时候都讲view的alpha还原，避免state change handler切换的时候造成干扰
                     view.alpha = 1f
                 }
+
             }).start()
     }
 

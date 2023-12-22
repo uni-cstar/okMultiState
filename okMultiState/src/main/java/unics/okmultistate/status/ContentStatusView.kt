@@ -45,6 +45,4 @@ internal class ContentStatusView(override var view: View? = null) : StatusView {
         return view
     }
 
-    override fun onDetach(container: ViewGroup) {
-    }
 }

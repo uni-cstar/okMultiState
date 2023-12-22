@@ -22,6 +22,11 @@ import unics.okmultistate.uistate.LoadingUiState
 import unics.okmultistate.uistate.NonetworkUiState
 
 /**
+ * UiState绑定器
+ */
+internal typealias UiStateBinder<T> = ((T) -> Unit)
+
+/**
  * Created by Lucio on 2023/2/17.
  * 状态布局：管理所有的StatusView
  * 设计规则：（一个StateLayout管理多个StatusView），只能包含一个内容结点，即会将该view视为content view
@@ -380,9 +385,10 @@ class StateLayout @JvmOverloads constructor(
         allStatusView[type] = statusView
 
         previous?.let {
-            performStatusViewLostState(it)
+            stateChangedHandler.onReplaceStatusView(this, it, statusView)
+            if(it.hasGainStateFocus)
+                it.onLostStateFocus(this)
             it.onDetach(this)
-            stateChangedHandler.onSwitchView(this, it, statusView)
         }
 
         if (currentState == type) {
@@ -482,7 +488,7 @@ class StateLayout @JvmOverloads constructor(
         }
     }
 
-    internal inline fun log(message: String) {
+    private inline fun log(message: String) {
         Log.d("MultiState", message)
     }
 }

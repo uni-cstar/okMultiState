@@ -114,7 +114,6 @@ class MultiStateActivity() : AppCompatActivity(R.layout.multi_state_test_activit
                         return this.view?.findViewById(R.id.lottie)
                     }
 
-
                     override fun onCreateView(
                         context: Context,
                         inflater: LayoutInflater,
