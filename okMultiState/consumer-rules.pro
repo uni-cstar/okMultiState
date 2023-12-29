@@ -1,4 +1,1 @@
--keep public class unics.okmultistate.**{
-    public *;
-    protected * ;
-}
+# 无规则传递
