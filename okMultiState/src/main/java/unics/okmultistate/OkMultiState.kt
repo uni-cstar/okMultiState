@@ -114,15 +114,8 @@ object OkMultiState {
     @JvmStatic
     fun bind(activity: Activity, ignoreParentType: Boolean = false): StateLayout {
         val contentView = activity.findViewById<ViewGroup>(android.R.id.content)
-//            ?: activity.findViewById<ViewGroup>(R.id.content)
-        //如果还未添加content view，则直接返回一个StateLayout
-        val userView = contentView.getChildAt(0)
-
-        //如果用户的视图已经支持MultiState，则直接返回
-        if (!ignoreParentType && userView != null && userView is StateLayout)
-            return userView
-
-        if (userView == null) {
+        if (contentView == null || contentView.childCount <= 0) {
+            //未查找到content view 或者用户还未设置，则直接添加一个StateLayout并返回
             val multiStateLayout = StateLayout(activity).also {
                 it.layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -130,10 +123,10 @@ object OkMultiState {
                 )
             }
             //用户的视图还没设置，则此时直接添加一个容器并返回
-            contentView.addView(multiStateLayout)
+            contentView?.addView(multiStateLayout)
             return multiStateLayout
         }
-        return bind(userView)
+        return bind(contentView.getChildAt(0))
     }
 
     /**
@@ -146,6 +139,10 @@ object OkMultiState {
         targetView: View,
         ignoreParentType: Boolean = false
     ): StateLayout {
+        if (targetView is StateLayout) {
+            //目标view 本身是state layout，则不用再包装
+            return targetView
+        }
         val parent = targetView.parent as ViewGroup?
 
         //目标视图的父级视图已经支持MultiState，则直接返回
