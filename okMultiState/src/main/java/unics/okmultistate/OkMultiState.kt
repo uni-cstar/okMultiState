@@ -27,6 +27,9 @@ object OkMultiState {
     @JvmStatic
     var stateChangeHandler: StateChangeHandler? = null
 
+    @JvmStatic
+    var bindStateLayoutFactory: BindStateLayoutFactory = BindStateLayoutFactory
+
     /**
      * status view 的工厂集合
      */
@@ -112,11 +115,15 @@ object OkMultiState {
      * 该方法最好在调用[Activity.setContentView]之后调用
      */
     @JvmStatic
-    fun bind(activity: Activity, ignoreParentType: Boolean = false): StateLayout {
+    fun bind(
+        activity: Activity,
+        ignoreParentType: Boolean = false,
+        stateLayoutFactory: BindStateLayoutFactory = bindStateLayoutFactory
+    ): StateLayout {
         val contentView = activity.findViewById<ViewGroup>(android.R.id.content)
         if (contentView == null || contentView.childCount <= 0) {
             //未查找到content view 或者用户还未设置，则直接添加一个StateLayout并返回
-            val multiStateLayout = StateLayout(activity).also {
+            val multiStateLayout = stateLayoutFactory.createStateLayout(activity).also {
                 it.layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
@@ -126,7 +133,7 @@ object OkMultiState {
             contentView?.addView(multiStateLayout)
             return multiStateLayout
         }
-        return bind(contentView.getChildAt(0))
+        return bind(contentView.getChildAt(0), ignoreParentType, stateLayoutFactory)
     }
 
     /**
@@ -137,7 +144,8 @@ object OkMultiState {
     @JvmStatic
     fun bind(
         targetView: View,
-        ignoreParentType: Boolean = false
+        ignoreParentType: Boolean = false,
+        stateLayoutFactory: BindStateLayoutFactory = bindStateLayoutFactory
     ): StateLayout {
         if (targetView is StateLayout) {
             //目标view 本身是state layout，则不用再包装
@@ -149,7 +157,7 @@ object OkMultiState {
         if (!ignoreParentType && parent != null && parent is StateLayout)
             return parent
 
-        val multiStateLayout = StateLayout(targetView.context)
+        val multiStateLayout = stateLayoutFactory.createStateLayout(targetView)
         parent?.let { targetViewParent ->
             val targetViewIndex = targetViewParent.indexOfChild(targetView)
             targetViewParent.removeView(targetView)

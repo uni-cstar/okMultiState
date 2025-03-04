@@ -35,7 +35,7 @@ internal typealias UiStateBinder<T> = ((T) -> Unit)
  * 因此在content与其他状态之间切换时，由于用户已经更改了child view，这样可能造成状态不一致的问题；虽然可以设计成让其他状态的view 覆盖content view，而不去更改content view的状态，但这种设计终归有点霸道;
  * 如果其他状态的view背景是半透明的，就会造成问题（虽然一般用户这么处理）
  */
-class StateLayout @JvmOverloads constructor(
+open class StateLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs), StateAction {
 
